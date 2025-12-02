@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import jira, ai, export, history, settings_api
+from app.routers import jira
 
 app = FastAPI(
     title="AI Test Scenario Generator Backend",
@@ -7,10 +7,10 @@ app = FastAPI(
 )
 
 app.include_router(jira.router)
-app.include_router(ai.router)
-app.include_router(export.router)
-app.include_router(history.router)
-app.include_router(settings_api.router)
+# app.include_router(ai.router)
+# app.include_router(export.router)
+# app.include_router(history.router)
+# app.include_router(settings_api.router)
 
 @app.get("/")
 def root():
