@@ -1,0 +1,8 @@
+# Ignore version control file
+.git/
+.gitignore
+
+# Ignore build/cache files
+__pycache__/
+*.pyc
+*.log
