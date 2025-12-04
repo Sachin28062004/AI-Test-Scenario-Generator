@@ -1,0 +1,97 @@
+<div class="p-6 space-y-6">
+
+  <h1 class="text-2xl font-bold">AI Test Scenario Generator</h1>
+
+  <!-- Jira Input -->
+  <div class="space-y-2">
+    <label class="font-semibold">Jira Ticket ID</label>
+    <div class="flex space-x-3">
+      <input
+        type="text"
+        [(ngModel)]="jiraId"
+        class="border p-2 rounded w-80"
+        placeholder="Enter Jira Ticket ID"
+      />
+
+      <button
+        (click)="fetch()"
+        class="px-5 py-2 bg-blue-600 text-white rounded"
+        [disabled]="loading"
+      >
+        {{ loading ? 'Loading...' : 'Fetch' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error" class="p-3 bg-red-100 text-red-600 rounded">
+    {{ error }}
+  </div>
+
+  <!-- Jira Ticket Output -->
+  <div *ngIf="jiraData" class="p-4 border rounded bg-gray-50">
+
+    <h2 class="text-xl font-bold mb-2">Jira Ticket Details</h2>
+
+    <p><span class="font-semibold">Summary:</span> {{ jiraData.summary }}</p>
+    <p><span class="font-semibold">Description:</span> {{ jiraData.description }}</p>
+
+  </div>
+
+  <!-- Scenarios Section -->
+  <div *ngIf="scenarios.length" class="space-y-4">
+    <h2 class="text-xl font-semibold">Test Scenarios</h2>
+
+    <div *ngFor="let s of scenarios" class="border rounded p-4 space-y-2">
+
+      <textarea
+        class="border p-2 w-full"
+        rows="3"
+        [(ngModel)]="s.text"
+        placeholder="Write scenario here..."
+      ></textarea>
+
+      <button (click)="fetch()" class="btn-fetch" [disabled]="loading">
+        {{ loading ? 'Loading...' : 'Fetch' }}
+      </button>
+      
+      <button class="btn-rewrite" (click)="rewriteScenario(s.id)">
+        Rewrite
+      </button>
+      
+      <button class="btn-remove" (click)="removeScenario(s.id)">
+        Remove
+      </button>
+      
+      <button (click)="addScenario()" class="btn-add">
+        Add Scenario
+      </button>
+
+      <!-- <div class="flex space-x-3">
+        <button
+          class="px-3 py-2 bg-green-600 text-white rounded"
+          (click)="rewriteScenario(s.id)"
+        >
+          Rewrite
+        </button>
+
+        <button
+          class="px-3 py-2 bg-red-500 text-white rounded"
+          (click)="removeScenario(s.id)"
+        >
+          Remove
+        </button>
+      </div>
+
+    </div>
+
+    <button
+      (click)="addScenario()"
+      class="px-4 py-2 bg-gray-700 text-white rounded"
+    >
+      Add Scenario
+    </button> -->
+
+  </div>
+
+</div>

@@ -15,7 +15,7 @@ services:
     build: ./frontend
     container_name: ai-testing-frontend
     ports:
-      - "3000:3000"
+      - "4200:4200"
     volumes:
      - ./frontend:/app
     stdin_open: true
