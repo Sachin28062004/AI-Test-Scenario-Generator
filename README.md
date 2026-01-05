@@ -2,7 +2,7 @@
 
 An AI-driven tool that:
 - Fetches Jira stories using Jira API
-- Enhances descriptions using Gemini Pro (via LangChain)
+- Enhances descriptions using OpenAI (via LangChain)
 - Generates test scenarios (Frontend + Backend + DB)
 - Allows editing scenarios in UI
 - Exports PDF and Excel
@@ -13,7 +13,7 @@ An AI-driven tool that:
 
 ### Backend
 - Python (FastAPI)
-- LangChain + Gemini Pro
+- LangChain + OpenAI
 - SQLAlchemy + SQLite
 - ReportLab (PDF)
 - openpyxl (Excel)
