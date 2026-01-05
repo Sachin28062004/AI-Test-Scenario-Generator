@@ -5,6 +5,7 @@ class Settings(BaseSettings):
     jira_domain: str = ""
     jira_email: str = ""
     jira_api_token: str = ""
+    encryption_key: str = ""
 
     class Config:
         env_file = ".env"

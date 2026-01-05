@@ -1,0 +1,32 @@
+<div class="app-shell">
+    <!-- Top Nav (Jira-like) -->
+    <header class="app-header">
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-mark">AI</span>
+                <span class="logo-text">Ai-Test-Scenario-Generator</span>
+            </div>
+            <nav class="nav-links">
+                <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+                    Home
+                </a>
+                <a routerLink="/history" routerLinkActive="active">
+                    History
+                </a>
+                <a routerLink="/settings" routerLinkActive="active">
+                    Settings
+                </a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <span class="app-badge">Beta</span>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <main class="app-content">
+        <div class="page-container">
+            <router-outlet></router-outlet>
+        </div>
+    </main>
+</div>

@@ -1,0 +1,64 @@
+<section class="page">
+    <header class="page-header">
+        <div>
+            <h1>Settings</h1>
+            <p class="subtitle">
+                Configure Jira connection details used by the AI generator.
+            </p>
+        </div>
+    </header>
+
+    <div class="card">
+        <div class="card-body">
+            <form class="settings-form" (ngSubmit)="onSave()" novalidate>
+                <div class="form-group">
+                    <label for="jiraEmail">Jira Email</label>
+                    <input
+                            id="jiraEmail"
+                            type="email"
+                            [(ngModel)]="jiraEmail"
+                            name="jiraEmail"
+                            placeholder="name@company.com"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="jiraDomain">Jira Domain</label>
+                    <input
+                            id="jiraDomain"
+                            type="text"
+                            [(ngModel)]="jiraDomain"
+                            name="jiraDomain"
+                            placeholder="your-domain.atlassian.net"
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="jiraApiToken">Jira API Token</label>
+                    <input
+                            id="jiraApiToken"
+                            type="password"
+                            [(ngModel)]="jiraApiToken"
+                            name="jiraApiToken"
+                            placeholder="Your Jira API token"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="geminiApiKey">Gemini API Key</label>
+                    <input
+                            id="geminiApiKey"
+                            type="password"
+                            [(ngModel)]="geminiApiKey"
+                            name="geminiApiKey"
+                            placeholder="Your Gemini API Key"
+                    />
+                </div>
+
+                <button type="submit" class="btn-primary">Save Settings</button>
+<!--                <span class="saved-message" *ngIf="savedMessage">-->
+<!--          {{ savedMessage }}-->
+<!--        </span>-->
+            </form>
+        </div>
+    </div>
+</section>

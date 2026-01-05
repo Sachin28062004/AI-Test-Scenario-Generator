@@ -1,4 +1,4 @@
-version: "3.9"
+#version: "3.9"
 
 services:
   backend:
@@ -10,6 +10,8 @@ services:
       - ./backend:/app
     environment:
       - PYTHONUNBUFFERED=1
+      - ENCRYPTION_KEY=mgkHkjQ0sXO9JNq8aJB0xtar97shnF3tA0qpxHx0sCE=
+    platform: linux/amd64
 
   frontend:
     build: ./frontend

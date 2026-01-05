@@ -1,179 +1,221 @@
-// -----------------------------------------
-// Home Component Styles
-// -----------------------------------------
+@import '../../app.component.scss';
 
-:host {
-  display: block;
-  padding: 2rem;
- color: var(--text);
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  justify-content: center;
 }
 
-// Page Title
-h1 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem; /* Increased spacing */
-}
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 
-// Labels
-label {
-  font-weight: 600;
-  color: var(--text-muted); /* Using muted text for labels for contrast */
-  display: block; /* Ensures label takes up its own line */
-  margin-bottom: 0.5rem;
-}
-
-// Input Field
-.input-field,
-input[type="text"] {
-  background: var(--card-bg);
-  border: 1px solid var(--grey-border); /* Consistent border color */
-  padding: 0.75rem; /* Slightly larger padding */
-  border-radius: 8px;
-  width: 24rem; /* Slightly wider desktop input */
-  max-width: 100%;
-  color: var(--text);
-  transition: 0.2s all ease-in-out;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-
-  &:focus {
-   border-color: var(--primary);
-   box-shadow: 0 0 0 2px var(--primary), 0 1px 3px rgba(0, 0, 0, 0.5); /* Primary focus glow */
-   outline: none;
- }
-}
-
-// Buttons
-button {
- border-radius: 8px;
- cursor: pointer;
- font-weight: 600; /* Bolder font weight */
- transition: 0.2s transform, 0.2s background-color;
- border: none;
- box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-
- &:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  box-shadow: none;
- }
-
- &:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
- }
-
- /* Primary Fetch Button */
- &.btn-fetch {
-  background: var(--primary);
-  color: white;
-  padding: 0.75rem 1.6rem; 
-
-  &:hover:not(:disabled) {
-   background: var(--primary-dark); /* FIX: Using pre-calculated CSS variable */
+  h1 {
+    margin: 0;
+    font-size: 22px;
   }
- }
 
- /* Neutral Button (Add) */
- &.btn-add {
-  background: var(--card-bg); /* Use card background for a soft look */
-  border: 1px solid var(--grey-border);
-  color: var(--text);
-  padding: 0.75rem 1.6rem;
+  .subtitle {
+    margin: 4px 0 0;
+    color: $app-muted;
+    font-size: 13px;
+  }
+}
+
+.card {
+  background: $app-surface;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(9, 30, 66, 0.25);
+  border: 1px solid $app-border;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  padding: 8px 16px;
+  border-bottom: 1px solid $app-border;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.card-body {
+  padding: 12px 16px 16px;
+}
+
+.table-card {
+  margin-top: 8px;
+}
+
+.table-cell {
+    width: 100px;
+   text-align: center;
+   vertical-align: middle;
+}
+.description {
+  width: 800px;
+//   justify-content: center;
+  text-align: justify;
+  white-space: pre-line;
+}
+
+.ticket-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 12px;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    min-width: 220px;
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    input {
+      border-radius: 3px;
+      border: 1px solid $app-border;
+      padding: 6px 8px;
+      font-size: 13px;
+      outline: none;
+
+      &:focus {
+        border-color: $app-primary;
+        box-shadow: 0 0 0 1px rgba(0, 82, 204, 0.3);
+      }
+    }
+  }
+}
+
+.btn-primary,
+.btn-secondary {
+  border: none;
+  border-radius: 3px;
+  font-size: 13px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn-primary {
+  background: $app-primary;
+  color: #ffffff;
 
   &:hover {
-   background: #2e2e2e; /* Slightly darker than card-bg */
+    background: $app-primary-hover;
   }
- }
 
- /* Rewrite Button (Success-like) */
- &.btn-rewrite {
-  background: var(--success); /* Using global success color */
-  color: white;
-  padding: 0.75rem 1.6rem; 
+  &:disabled {
+    cursor: default;
+    background: #a5adba;
+  }
+}
+
+.btn-secondary {
+  background: #f4f5f7;
+  color: $app-text;
+  border: 1px solid $app-border;
 
   &:hover {
-   background: var(--success-dark); /* Using global success-dark */
+    background: #ebecf0;
   }
- }
+}
 
- /* Remove Button (Danger) */
- &.btn-remove {
-  background: var(--danger); /* Using global danger color */
-  color: white;
-  padding: 0.75rem; /* Smaller padding for an icon-style button */
-  box-shadow: none; /* Less emphasis on small utility button */
-  
+.btn-link {
+  background: none;
+  border: none;
+  color: $app-primary;
+  font-size: 12px;
+  padding: 0;
+  margin-right: 8px;
+  cursor: pointer;
+
   &:hover {
-   background: #c94441;
-   transform: none;
+    text-decoration: underline;
   }
- }
+
+  &.btn-link-danger {
+    color: #de350b;
+  }
 }
 
-// Error Message Box
-.error-box {
- padding: 1rem;
- background: rgba(217, 83, 79, 0.15); /* Using var(--danger) color with opacity */
- border-left: 4px solid var(--danger); /* Consistent border color */
- color: var(--danger); 
- border-radius: 8px; /* Consistent rounding */
- font-size: 0.95rem;
- font-weight: 500;
+.table-wrapper {
+  overflow-x: auto;
 }
 
-// Jira Info Container
-.ticket-card {
- background: var(--card-bg);
- padding: 1.5rem;
- border-radius: 12px;
- border: 1px solid var(--grey-border); /* Consistent border color */
- box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-
-// Scenarios
-.scenario-card {
- background: var(--card-bg);
- padding: 1rem;
- border-radius: 12px;
- border: 1px solid var(--grey-border); /* Consistent border color */
- transition: 0.2s ease-in-out;
- cursor: pointer;
- box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-
- &:hover {
-  border-color: var(--primary);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Subtle elevation on hover */
-  transform: scale(1.01);
- }
-}
-
-// Textarea
-textarea {
- background: var(--card-bg);
- border: 1px solid var(--grey-border); /* Consistent border color */
- padding: 50px;
- border-radius: 10px;
- width: 100%;
- color: var(--text);
- min-height: 150px;
- transition: border 0.2s;
-
- &:focus {
-  border-color: var(--primary);
-  outline: none;
- }
-}
-
-// Responsive
-@media (max-width: 768px) {
- :host {
-  padding: 1rem;
- }
-
- input[type="text"],
- .input-field {
+.scenario-table {
   width: 100%;
-  max-width: none;
- }
+  border-collapse: collapse;
+  font-size: 13px;
+
+  th,
+  td {
+    padding: 6px 8px;
+    border-bottom: 1px solid $app-border;
+    vertical-align: top;
+  }
+
+  thead {
+    background: #f4f5f7;
+
+    th {
+      font-weight: 600;
+      font-size: 12px;
+      color: $app-muted;
+    }
+  }
+
+  tbody tr:hover {
+    background: #f7f8f9;
+  }
+
+  input,
+  textarea {
+    width: 100%;
+    font-size: 12px;
+    border-radius: 3px;
+    border: 1px solid $app-border;
+    padding: 4px 6px;
+    resize: vertical;
+
+    &:focus {
+      border-color: $app-primary;
+      box-shadow: 0 0 0 1px rgba(0, 82, 204, 0.3);
+      outline: none;
+    }
+  }
+
+  .cell-multiline {
+    white-space: pre-line;
+  }
+
+  .actions-cell {
+    white-space: nowrap;
+  }
+}
+
+.table-footer {
+  margin-top: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: $app-muted;
+}
+
+.error {
+  margin-top: 8px;
+  color: #de350b;
+  font-size: 12px;
 }
