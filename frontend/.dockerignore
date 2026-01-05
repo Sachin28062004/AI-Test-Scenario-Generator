@@ -1,0 +1,35 @@
+# Angular build output
+dist/
+out-tsc/
+.cache/
+.angular/
+
+# Node dependencies
+node_modules/
+
+# Environment files
+src/environments/*.ts
+!src/environments/environment.prod.ts
+
+# Logs
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+pnpm-debug.log
+log.txt
+
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+
+# Local dev files
+.idea/
+.vscode/
+*.swp
+
+# npm pack output
+*.tgz
+
+# Git
+.git/
+.gitignore

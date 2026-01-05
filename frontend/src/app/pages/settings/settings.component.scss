@@ -1,0 +1,78 @@
+@import '../../app.component.scss';
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.page-header {
+  h1 {
+    margin: 0;
+    font-size: 22px;
+  }
+
+  .subtitle {
+    margin: 4px 0 0;
+    color: $app-muted;
+    font-size: 13px;
+  }
+}
+
+.card {
+  background: $app-surface;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px rgba(9, 30, 66, 0.25);
+  border: 1px solid $app-border;
+}
+
+.card-body {
+  padding: 12px 16px 16px;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    input {
+      border-radius: 3px;
+      border: 1px solid $app-border;
+      padding: 6px 8px;
+      font-size: 13px;
+      outline: none;
+
+      &:focus {
+        border-color: $app-primary;
+        box-shadow: 0 0 0 1px rgba(0, 82, 204, 0.3);
+      }
+    }
+
+    small {
+      margin-top: 4px;
+      font-size: 11px;
+      color: $app-muted;
+    }
+  }
+
+  .btn-primary {
+    align-self: flex-start;
+  }
+
+  .saved-message {
+    margin-left: 8px;
+    font-size: 12px;
+    color: #006644;
+  }
+}

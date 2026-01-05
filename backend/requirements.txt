@@ -5,7 +5,9 @@ requests
 pydantic>=2.0.0
 sqlalchemy
 langchain
-google-generativeai
 reportlab
 openpyxl
 pydantic-settings
+alembic
+cryptography
+google-genai

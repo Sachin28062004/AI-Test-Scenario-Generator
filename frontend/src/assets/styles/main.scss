@@ -1,0 +1,200 @@
+// @import './variables';
+// @import './mixins';
+// @import './layout';
+
+/* ---------------------------------------------------------
+   MAIN GLOBAL SCSS – Single File
+   Dark Grey + Royal Blue Theme
+---------------------------------------------------------- */
+
+/* =========== CSS RESET =========== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+$success-base-color: #2ecc71;
+
+.my-element-success {
+    background: var(--success-dark); 
+    color: var(--success);
+}
+
+/* =========== THEME VARIABLES =========== */
+:root {
+  --primary: #4169e1;
+  --primary-dark: #3557c4;
+
+  --background: #121212;
+  --card-bg: #1e1e1e;
+
+  --grey-light: #e6e6e6;
+  --grey-border: #2f2f2f;
+
+  --text: #f3f3f3;
+  --text-muted: #b5b5b5;
+
+  --success: #{$success-base-color}; 
+  --success-dark: #{darken($success-base-color, 5%)};
+  --danger: #d9534f;
+  --warning: #f0ad4e;
+}
+
+/* =========== GLOBAL BODY =========== */
+body {
+  font-family: "Inter", "Roboto", Arial, sans-serif;
+  background: var(--background);
+  color: var(--text);
+  line-height: 1.5;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* =========== GLOBAL TITLES =========== */
+h1, h2, h3 {
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* =========== INPUTS =========== */
+input,
+textarea,
+select {
+  background: var(--card-bg);
+  border: 1px solid var(--grey-border);
+  padding-right: 20px;
+  padding-left: 20p;
+  padding: 10px;
+  border-radius: 8px;
+  color: var(--text);
+  width: 100%;
+  transition: 0.2s border ease;
+
+  &:focus {
+    border-color: var(--primary);
+    outline: none;
+  }
+}
+
+/* =========== BUTTONS =========== */
+
+button {
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  padding: 10px 16px;
+  transition: 0.2s ease-in-out;
+  border: none;
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+}
+
+/* Primary Button */
+.btn-primary {
+  background: var(--primary);
+  color: white;
+
+  &:hover:not(:disabled) {
+    background: var(--primary-dark);
+  }
+}
+
+/* Neutral button */
+.btn-neutral {
+  background: #444;
+  color: white;
+
+  &:hover {
+    background: #555;
+  }
+}
+
+/* Success */
+.btn-success {
+  background: var(--success);
+  color: white;
+
+  &:hover {
+    background: var(--success);
+  }
+}
+
+/* Danger */
+.btn-danger {
+  background: var(--danger);
+  color: white;
+
+  &:hover {
+    background: #c94544;
+  }
+}
+
+/* =========== CARD STYLE =========== */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--grey-border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+/* =========== ERROR BOX =========== */
+.error-box {
+  padding: 12px;
+  background: rgba(255, 0, 0, 0.14);
+  border-left: 4px solid var(--danger);
+  color: var(--danger);
+  border-radius: 6px;
+}
+
+/* =========== FLEX HELPERS =========== */
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+/* =========== RESPONSIVE =========== */
+@media (max-width: 768px) {
+  body {
+    padding: 12px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+}

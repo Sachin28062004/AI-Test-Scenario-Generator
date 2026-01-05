@@ -1,0 +1,225 @@
+<section class="page">
+    <header class="page-header">
+        <div>
+            <h1>AI Test Scenario Generator</h1>
+            <p class="subtitle">
+                Generate and manage test scenarios for your Jira issues.
+            </p>
+        </div>
+    </header>
+
+    <div class="card">
+        <div class="card-body">
+            <form
+                    class="ticket-form"
+                    (ngSubmit)="onGenerate()"
+                    novalidate
+            >
+                <div class="form-group">
+                    <label for="jiraTicketId">Jira Ticket ID</label>
+                    <input
+                            id="jiraTicketId"
+                            type="text"
+                            [(ngModel)]="jiraTicketId"
+                            name="jiraTicketId"
+                            placeholder="e.g. PROJ-123"
+                    />
+                </div>
+                <button
+                        (click)="fetch()"
+                        type="submit"
+                        class="btn-primary"
+                        [disabled]="loading"
+                >
+                    {{ loading ? 'Loading...' : 'Fetch' }}
+                </button>
+                <button
+                        type="submit"
+                        class="btn-primary"
+                        [disabled]="isGenerating"
+                >
+                    {{ isGenerating ? 'Generating…' : 'Generate Test Scenarios' }}
+                </button>
+            </form>
+            <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+        </div>
+    </div>
+    <div class="card table-card" *ngIf="jiraData">
+        <header class="card-header">
+            <h2>Jira Ticket Details</h2>
+        </header>
+        <div class="card-body">
+            <div class="table-wrapper">
+                <table class="scenario-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 100px;">Ticket ID</th>
+                        <th style="width: 100px;">Project</th>
+                        <th style="width: 100px;">Summary</th>
+                        <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="table-cell">{{ jiraData.ticket_id }}</td>
+                        <td class="table-cell">{{ jiraData.project }}</td>
+                        <td class="table-cell">{{ jiraData.summary }}</td>
+                        <td>
+                            <div class="description" [innerHTML]="formattedDescription"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card table-card" *ngIf="scenarios.length">
+        <header class="card-header">
+            <h2>Generated Test Scenarios</h2>
+            <div class="card-actions">
+                <button class="btn-secondary" (click)="onAddScenario()">
+                    + Add Scenario
+                </button>
+            </div>
+        </header>
+
+        <div class="card-body">
+            <div class="table-wrapper">
+                <table class="scenario-table">
+                    <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th style="width: 180px;">Title</th>
+                        <th>Description</th>
+                        <th style="width: 160px;">Preconditions</th>
+                        <th style="width: 180px;">Steps</th>
+                        <th style="width: 180px;">Expected Result</th>
+                        <th style="width: 120px;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let s of scenarios">
+                        <td class="table-cell">{{ s.id }}</td>
+
+                        <!-- Title -->
+                        <td class="table-cell">
+                            <ng-container *ngIf="editingId === s.id; else titleView">
+                                <input
+                                        [(ngModel)]="s.title"
+                                        name="title-{{ s.id }}"
+                                />
+                            </ng-container>
+                            <ng-template #titleView>
+                                {{ s.title }}
+                            </ng-template>
+                        </td>
+
+                        <!-- Description -->
+                        <td>
+                            <ng-container *ngIf="editingId === s.id; else descView">
+                  <textarea
+                          [(ngModel)]="s.description"
+                          name="description-{{ s.id }}"
+                          rows="2"
+                  ></textarea>
+                            </ng-container>
+                            <ng-template #descView>
+                                <div class="cell-multiline">
+                                    {{ s.description }}
+                                </div>
+                            </ng-template>
+                        </td>
+
+                        <!-- Preconditions -->
+                        <td>
+                            <ng-container *ngIf="editingId === s.id; else preView">
+                  <textarea
+                          [(ngModel)]="s.preconditions"
+                          name="preconditions-{{ s.id }}"
+                          rows="2"
+                  ></textarea>
+                            </ng-container>
+                            <ng-template #preView>
+                                <div class="cell-multiline">
+                                    {{ s.preconditions }}
+                                </div>
+                            </ng-template>
+                        </td>
+
+                        <!-- Steps -->
+                        <td class="table-cell">
+                            <ng-container *ngIf="editingId === s.id; else stepsView">
+                  <textarea
+                          [(ngModel)]="s.steps"
+                          name="steps-{{ s.id }}"
+                          rows="2"
+                  ></textarea>
+                            </ng-container>
+                            <ng-template #stepsView>
+                                <div class="cell-multiline">
+                                    {{ s.steps }}
+                                </div>
+                            </ng-template>
+                        </td>
+
+                        <!-- Expected Result -->
+                        <td>
+                            <ng-container *ngIf="editingId === s.id; else expView">
+                  <textarea
+                          [(ngModel)]="s.expectedResult"
+                          name="expectedResult-{{ s.id }}"
+                          rows="2"
+                  ></textarea>
+                            </ng-container>
+                            <ng-template #expView>
+                                <div class="cell-multiline">
+                                    {{ s.expectedResult }}
+                                </div>
+                            </ng-template>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="actions-cell">
+                            <ng-container *ngIf="editingId === s.id; else actionButtons">
+                                <button
+                                        class="btn-link"
+                                        (click)="onSaveScenario(s)"
+                                >
+                                    Save
+                                </button>
+                                <button
+                                        class="btn-link btn-link-danger"
+                                        (click)="onCancelEdit()"
+                                >
+                                    Cancel
+                                </button>
+                            </ng-container>
+                            <ng-template #actionButtons>
+                                <button
+                                        class="btn-link"
+                                        (click)="onEditScenario(s.id)"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                        class="btn-link btn-link-danger"
+                                        (click)="onDeleteScenario(s.id)"
+                                >
+                                    Delete
+                                </button>
+                            </ng-template>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <footer class="table-footer">
+                <span>{{ scenarios.length }} scenario(s)</span>
+                <button class="btn-primary" (click)="onExport()">
+                    Export / Download
+                </button>
+            </footer>
+        </div>
+    </div>
+</section>

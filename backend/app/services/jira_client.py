@@ -3,7 +3,8 @@ from app.core.settings import settings
 from app.schemas.jira_schema import JiraResponse
 
 class JiraClient:
-    def __init__(self):
+    def __init__(self, db):
+        self.db = db
         if not settings.jira_domain or not settings.jira_email or not settings.jira_api_token:
             raise ValueError("Jira settings not configured. Please add them in /settings.")
 
