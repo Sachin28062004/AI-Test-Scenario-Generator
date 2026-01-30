@@ -1,4 +1,5 @@
 # AI Test Scenario Generator
+[App Link] : https://ai-test-scenario-generator.vercel.app/home
 
 An AI-driven tool that:
 - Fetches Jira stories using Jira API
