@@ -5,6 +5,7 @@ import {
 } from '../../services/test-scenario.service';
 import { AuthService } from '../../services/auth.service';
 import axios from 'axios';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -19,7 +20,7 @@ export class HomeComponent {
   isGenerating = false;
   errorMessage = '';
 
-  private backendUrl = localStorage.getItem('backendUrl') || 'http://localhost:8000';
+  private backendUrl = environment.apiUrl;
 
   constructor(
     private testScenarioService: TestScenarioService,

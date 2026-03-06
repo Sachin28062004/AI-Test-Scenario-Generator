@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import axios from 'axios';
 import { AuthService } from '../../services/auth.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-settings',
@@ -8,7 +9,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent {
-  backendUrl = localStorage.getItem('backendUrl') || 'http://localhost:8000';
+  backendUrl = environment.apiUrl;
   grokApiKey = '';
   errorMessage = '';
   savedMessage = '';
