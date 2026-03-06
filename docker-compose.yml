@@ -12,6 +12,7 @@ services:
       - PYTHONUNBUFFERED=1
       - ENCRYPTION_KEY=mgkHkjQ0sXO9JNq8aJB0xtar97shnF3tA0qpxHx0sCE=
       - DATABASE_URL=postgresql://postgres:tgLhs7fdTppXiZte@db.xxxxx.supabase.co:5432/postgres
+      - JWT_SECRET=change-me-in-production-use-long-random-string
     platform: linux/amd64
 
   frontend:
