@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { JiraService } from '../../services/jira.service';
 import {
   TestScenario,
   TestScenarioService,
 } from '../../services/test-scenario.service';
+import { AuthService } from '../../services/auth.service';
 import axios from 'axios';
 
 @Component({
@@ -12,148 +12,64 @@ import axios from 'axios';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  jiraTicketId = '';
-  jiraData: any = null;
+  title = '';
+  description = '';
   scenarios: TestScenario[] = [];
   editingId: number | null = null;
-  loading = false;
   isGenerating = false;
   errorMessage = '';
-  formattedDescription = '';
+
+  private backendUrl = localStorage.getItem('backendUrl') || 'http://localhost:8000';
 
   constructor(
-      private jira: JiraService,
-      private testScenarioService: TestScenarioService
-    ) {}
+    private testScenarioService: TestScenarioService,
+    private auth: AuthService
+  ) {}
 
-
-  async fetch() {
-      this.errorMessage = '';
-      this.loading = true;
-
-      try {
-        const data = await this.jira.getJiraTicket(this.jiraTicketId);
-        this.jiraData = data;
-        this.formattedDescription = this.convertADFToHTML(data.description);
-
-      } catch (err: any) {
-        this.errorMessage = err?.message || 'Failed to fetch Jira Ticket';
-      } finally {
-        this.loading = false;
-      }
-    }
-
-  convertADFToHTML(adf: any[]): string {
-    if (!Array.isArray(adf)) return '';
-
-    let html = '';
-
-    adf.forEach(block => {
-      if (block.type === 'paragraph') {
-        let paragraphHTML = '';
-
-        block.content?.forEach((item: any) => {
-          let text = item.text || '';
-
-          // Apply formatting
-          if (item.marks) {
-            item.marks.forEach((mark: any) => {
-              if (mark.type === 'strong') text = `<strong>${text}</strong>`;
-              if (mark.type === 'em') text = `<em>${text}</em>`;
-              if (mark.type === 'underline') text = `<u>${text}</u>`;
-            });
-          }
-
-          paragraphHTML += text;
-        });
-
-        html += `<p>${paragraphHTML}</p>`;
-      }
-    });
-
-    return html;
-  }
-
-
-  refreshScenarios() {
+  refreshScenarios(): void {
     this.scenarios = this.testScenarioService.getScenarios();
   }
 
-  async onGenerate() {
+  async onGenerate(): Promise<void> {
     this.errorMessage = '';
 
-    if (!this.jiraTicketId.trim()) {
-      this.errorMessage = 'Please enter a Jira Ticket ID.';
+    if (!this.description?.trim()) {
+      this.errorMessage = 'Please enter a description.';
       return;
     }
 
     this.isGenerating = true;
 
-    const backendUrl = 'http://localhost:8000';
-//     const backendUrl = environment.backendUrl;
-    const url = `${backendUrl}/api/ai/generate/${this.jiraTicketId}`;
-    const response = await axios.post(url);
-    const responseData = response.data;
-    const backendScenarios = Array.isArray(responseData?.scenarios)
-                ? responseData.scenarios
-                : [];
+    try {
+      const res = await axios.post(
+        `${this.backendUrl}/api/ai/generate`,
+        { description: this.description, title: this.title },
+        { headers: this.auth.getAuthHeader() }
+      );
+      const data = res.data;
+      const backendScenarios = Array.isArray(data?.scenarios) ? data.scenarios : [];
 
-    const formatted = backendScenarios.map((s: any) => ({
-                title: s.title || 'Untitled Scenario',
-                description: s.type ? `Type: ${s.type}` : '',
-                preconditions: s.preconditions || '',
-                steps: Array.isArray(s.steps) ? s.steps.join('\n') : (s.steps || ''),
-                expectedResult: s.expected_result || '',
-            }));
+      const formatted = backendScenarios.map((s: any) => ({
+        title: s.title || 'Untitled Scenario',
+        description: s.type ? `Type: ${s.type}` : '',
+        preconditions: s.preconditions || '',
+        steps: Array.isArray(s.steps) ? s.steps.join('\n') : (s.steps || ''),
+        expectedResult: s.expected_result || '',
+      }));
 
-        this.testScenarioService.setScenarios(formatted);
-
-//     this.http.post<any>(url, {}).subscribe({
-//       next: (response) => {
-        /**
-         * Backend returns:
-         * {
-         *   enhanced_description: "...",
-         *   scenarios_count: 5,
-         *   export: { filename, filepath, record_id }
-         * }
-         *
-         * Each scenario from Gemini has:
-         * {
-         *   id, type, title, steps[], expected_result
-         * }
-         */
-         console.log(response)
-
-//         const backendScenarios = Array.isArray(response?.scenarios) ? response.scenarios : [];
-//
-//         // Convert backend → frontend UI structure
-//         const formatted = backendScenarios.map((s: any) => ({
-//           title: s.title || 'Untitled Scenario',
-//           description: s.type ? `Type: ${s.type}` : '',
-//           preconditions: s.preconditions || '',
-//           steps: Array.isArray(s.steps) ? s.steps.join('\n') : (s.steps || ''),
-//           expectedResult: s.expected_result || '',
-//         }));
-//
-//         this.testScenarioService.setScenarios(formatted);
-        this.refreshScenarios();
-
-        this.isGenerating = false;
-//       },
-
-      error: (err:any) => {
-        this.isGenerating = false;
-
-        this.errorMessage = err?.error?.detail
-          || err?.message
-          || 'Failed to generate test scenarios. Please try again.';
-      }
-//     });
+      this.testScenarioService.setScenarios(formatted);
+      this.refreshScenarios();
+    } catch (err: any) {
+      this.errorMessage =
+        err?.response?.data?.detail ||
+        err?.message ||
+        'Failed to generate test scenarios. Please try again.';
+    } finally {
+      this.isGenerating = false;
+    }
   }
 
-
-  onAddScenario() {
+  onAddScenario(): void {
     const newScenario = this.testScenarioService.addScenario({
       title: 'New Test Scenario',
       description: 'Describe the scenario...',
@@ -162,11 +78,11 @@ export class HomeComponent {
     this.editingId = newScenario.id;
   }
 
-  onEditScenario(id: number) {
+  onEditScenario(id: number): void {
     this.editingId = id;
   }
 
-  onDeleteScenario(id: number) {
+  onDeleteScenario(id: number): void {
     this.testScenarioService.deleteScenario(id);
     this.refreshScenarios();
     if (this.editingId === id) {
@@ -174,38 +90,33 @@ export class HomeComponent {
     }
   }
 
-  onSaveScenario(scenario: TestScenario) {
+  onSaveScenario(scenario: TestScenario): void {
     this.testScenarioService.updateScenario(scenario.id, scenario);
     this.refreshScenarios();
     this.editingId = null;
   }
 
-  onCancelEdit() {
+  onCancelEdit(): void {
     this.refreshScenarios();
     this.editingId = null;
   }
 
-  // Export as CSV and add to history
-  onExport() {
+  onExport(): void {
     if (!this.scenarios.length) {
       this.errorMessage = 'No scenarios to export.';
       return;
     }
 
     const timestamp = new Date();
-    const dateStr = timestamp
-      .toISOString()
-      .replace(/[:.]/g, '-')
-      .slice(0, 19);
-    const safeTicketId = this.jiraTicketId || 'no-ticket';
-    const fileName = `${safeTicketId}-test-scenarios-${dateStr}.csv`;
+    const dateStr = timestamp.toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    const fileName = `scenarios-${dateStr}.csv`;
 
     const csvContent = this.toCsv(this.scenarios);
     this.downloadFile(fileName, csvContent, 'text/csv;charset=utf-8;');
 
     this.testScenarioService.addHistoryItem({
       fileName,
-      jiraTicketId: this.jiraTicketId || 'N/A',
+      sourceId: 'Manual',
       createdAt: timestamp,
       scenariosCount: this.scenarios.length,
     });
@@ -228,9 +139,7 @@ export class HomeComponent {
       this.escapeCsv(s.steps || ''),
       this.escapeCsv(s.expectedResult || ''),
     ]);
-    return [header, ...rows]
-      .map((row) => row.join(','))
-      .join('\n');
+    return [header, ...rows].map((row) => row.join(',')).join('\n');
   }
 
   private escapeCsv(value: string): string {
@@ -242,7 +151,7 @@ export class HomeComponent {
     return escaped;
   }
 
-  private downloadFile(fileName: string, content: string, mimeType: string) {
+  private downloadFile(fileName: string, content: string, mimeType: string): void {
     const blob = new Blob([content], { type: mimeType });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');

@@ -1,14 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import axios from 'axios';
-
-interface JiraSettings {
-  jira_token: string;
-  jira_email: string;
-  jira_domain: string;
-  gemini_api_key: string;
-}
-
-const SETTINGS_KEY = 'ai-tsg-jira-settings';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-settings',
@@ -16,38 +8,29 @@ const SETTINGS_KEY = 'ai-tsg-jira-settings';
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent {
-    backendUrl = localStorage.getItem('backendUrl') || 'http://localhost:8000';
-  jiraEmail = '';
-  jiraDomain = '';
-  jiraApiToken = '';
-  geminiApiKey = '';
+  backendUrl = localStorage.getItem('backendUrl') || 'http://localhost:8000';
+  grokApiKey = '';
+  errorMessage = '';
+  savedMessage = '';
 
-//   ngOnInit(): void {
-//     const raw = localStorage.getItem(SETTINGS_KEY);
-//     if (raw) {
-//       const settings: JiraSettings = JSON.parse(raw);
-//       this.jiraApiToken = settings.jiraApiToken;
-//       this.jiraEmail = settings.jiraEmail;
-//       this.jiraDomain = settings.jiraDomain;
-//       this.geminiApiKey = settings.geminiApiKey;
-//
-//     }
-//   }
+  constructor(private auth: AuthService) {}
 
-  async onSave() {
-    const payload: JiraSettings = {
-          jira_token: this.jiraApiToken,
-          jira_email: this.jiraEmail,
-          jira_domain: this.jiraDomain,
-          gemini_api_key: this.geminiApiKey
-        };
+  async onSave(): Promise<void> {
+    this.errorMessage = '';
+    this.savedMessage = '';
+
     try {
-        const res = await axios.post(`${this.backendUrl}/api/settings/`, payload);
-        alert('Settings saved');
-        this.jiraApiToken = '';
-        this.geminiApiKey = '';
+      await axios.post(
+        `${this.backendUrl}/api/settings/`,
+        { grok_api_key: this.grokApiKey },
+        { headers: this.auth.getAuthHeader() }
+      );
+      this.savedMessage = 'Settings saved.';
+      this.grokApiKey = '';
+      setTimeout(() => (this.savedMessage = ''), 3000);
     } catch (err: any) {
-        alert('Failed to save settings: ' + (err.response?.data?.detail || err.message));
+      this.errorMessage =
+        err?.response?.data?.detail || err?.message || 'Failed to save settings';
     }
   }
 }

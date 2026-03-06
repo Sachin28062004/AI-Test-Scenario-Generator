@@ -10,11 +10,11 @@ expectedResult?: string;
 }
 
 export interface ExportHistoryItem {
-id: number;
-fileName: string;
-jiraTicketId: string;
-createdAt: Date;
-scenariosCount: number;
+  id: number;
+  fileName: string;
+  sourceId: string;
+  createdAt: Date;
+  scenariosCount: number;
 }
 
 @Injectable({

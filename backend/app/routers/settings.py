@@ -1,16 +1,17 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+
 from app.database import database, crud
-from app.utils.crypto import encrypt_text, decrypt_text
+from app.routers.auth import get_current_user
+from app.database.models import User
 
 router = APIRouter(prefix="/api/settings", tags=["settings"])
 
+
 class SettingsIn(BaseModel):
-    jira_domain: str
-    jira_email: str
-    jira_token: str
-    gemini_api_key: str = None
+    grok_api_key: str
+
 
 def get_db():
     db = database.SessionLocal()
@@ -19,26 +20,30 @@ def get_db():
     finally:
         db.close()
 
-@router.post("/", summary="Save settings (Jira credentials + Gemini key)")
-def save_settings(payload: SettingsIn, db: Session = Depends(get_db)):
+
+@router.post("/", summary="Save Grok API key")
+def save_settings(
+    payload: SettingsIn,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     try:
-        jira_token_enc = payload.jira_token
-        gemini_key_enc = payload.gemini_api_key if payload.gemini_api_key else None
-        settings = crud.save_settings(db, payload.jira_domain, payload.jira_email, jira_token_enc, gemini_key_enc)
+        grok_key_enc = payload.grok_api_key if payload.grok_api_key else None
+        settings = crud.save_settings(db, grok_key_enc)
         return {"message": "settings saved", "id": settings.id}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.get("/", summary="Get latest settings")
-def get_latest_settings(db: Session = Depends(get_db)):
+def get_latest_settings(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     s = crud.get_settings(db)
     if not s:
         return {}
     return {
-        "jira_domain": s.jira_domain,
-        "jira_email": s.jira_email,
-        # do NOT return token in cleartext to frontend — only return presence indicator
-        "has_jira_token": bool(s.jira_token_encrypted),
-        "has_gemini_key": bool(s.gemini_api_key_encrypted),
+        "has_grok_key": bool(s.grok_api_key_enc),
         "created_at": s.created_at
     }

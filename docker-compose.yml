@@ -11,6 +11,7 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - ENCRYPTION_KEY=mgkHkjQ0sXO9JNq8aJB0xtar97shnF3tA0qpxHx0sCE=
+      - JWT_SECRET=change-me-in-production-use-long-random-string
     platform: linux/amd64
 
   frontend:
