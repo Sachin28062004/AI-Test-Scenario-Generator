@@ -19,3 +19,7 @@ build/
 
 venv
 .idea
+
+#db
+*.db
+*.sqbpro
