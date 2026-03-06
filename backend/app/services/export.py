@@ -1,20 +1,23 @@
 import os
-from openpyxl import Workbook
 from datetime import datetime
 from app.database import crud
 
 EXPORT_DIR = os.getenv("EXPORT_DIR", "/app/exports")
 
+
 def ensure_export_dir():
     os.makedirs(EXPORT_DIR, exist_ok=True)
     return EXPORT_DIR
 
-def save_scenarios_to_excel(ticket_id: str, scenarios: list, db_session):
+
+def save_scenarios_to_excel(batch_id: str, scenarios: list, db_session):
+    """Save scenarios to Excel. batch_id is 'manual' or a custom identifier."""
     ensure_export_dir()
     timestamp = datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
-    filename = f"{ticket_id}_scenarios_{timestamp}.xlsx"
+    filename = f"{batch_id}_scenarios_{timestamp}.xlsx"
     filepath = os.path.join(EXPORT_DIR, filename)
 
+    from openpyxl import Workbook
     wb = Workbook()
     ws = wb.active
     ws.title = "Test Scenarios"
@@ -30,6 +33,5 @@ def save_scenarios_to_excel(ticket_id: str, scenarios: list, db_session):
 
     wb.save(filepath)
 
-    # Save record in DB
-    rec = crud.save_export_record(db_session, ticket_id, filename, filepath)
+    rec = crud.save_export_record(db_session, batch_id, filename, filepath)
     return {"filename": filename, "filepath": filepath, "record_id": rec.id}
