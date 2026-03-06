@@ -5,7 +5,7 @@ import {
 } from '../../services/test-scenario.service';
 import { AuthService } from '../../services/auth.service';
 import axios from 'axios';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-home',

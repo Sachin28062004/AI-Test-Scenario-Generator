@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import axios from 'axios';
 import { AuthService } from '../../services/auth.service';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-settings',
