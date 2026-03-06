@@ -20,6 +20,7 @@ app.include_router(export_routes.router)
 origins = [
     "http://localhost:4200",
     "http://127.0.0.1:4200",
+    "https://ai-test-scenario-generator.vercel.app"
 ]
 
 app.add_middleware(

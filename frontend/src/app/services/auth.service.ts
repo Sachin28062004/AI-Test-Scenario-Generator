@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import { environment } from '../../environments/environment';
 
 const TOKEN_KEY = 'ai-tsg-jwt-token';
-const BACKEND_URL = localStorage.getItem('backendUrl') || 'http://localhost:8000';
+const BACKEND_URL = environment.apiUrl;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
