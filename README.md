@@ -1,4 +1,5 @@
 # AI Test Scenario Generator
+[App Link] : https://ai-test-scenario-generator.vercel.app/home
 
 An AI-driven tool that:
 - Accepts feature/requirement descriptions (paste or type)
